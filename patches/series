@@ -1,1 +1,4 @@
-# Add patch filenames here in application order after creating the first tested patch.
+# Ordered list of downstream patches. Blank lines and comments are ignored.
+# Do not add a filename until the corresponding patch exists and has been reviewed.
+# Example future entry:
+# 0001-kotak-product-identity.patch
