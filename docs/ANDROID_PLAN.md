@@ -1,26 +1,28 @@
 # K.O.T.A.K Browser — Android-first plan
 
 ## Goal
-Produce a reproducible Android ARM64 Chromium build first, then apply K.O.T.A.K branding as a small set of downstream patches.
+Produce a reproducible Android ARM64 Chromium build first, then apply K.O.T.A.K branding as small downstream patches.
 
-## Reality check: no paid cloud VM
-We can edit this repository from an Android phone, use Codespaces if usage is available, and run lightweight GitHub Actions checks. These do not guarantee a full Chromium build will fit within available disk, memory, runtime, or quotas.
+## Current Codespaces assessment
+The reported Codespace has 2 CPU threads, about 7 GiB RAM and about 18 GiB free disk. Do not start a Chromium checkout there. Upstream's Android guide specifies an x86-64 Linux host with at least 8 GB RAM, recommends more than 16 GB, and requires at least 100 GB free disk. See the official guide linked below.
 
-A full Chromium Android build is not a normal Gradle-only app build. It needs Chromium source, `depot_tools`, Android SDK/NDK dependencies managed by the Chromium workflow, GN/Ninja, and a supported Linux x86-64 host. A phone or a default small Codespace should be treated as an editing environment, not a reliable full-build host.
+## No-paid-cloud strategy
+We can edit this small repository, create and review patches, and run lightweight CI while free usage is available. That does not make a full Chromium checkout/build possible on the current Codespace. We will not fetch Chromium until a host passes the preflight.
 
 ## Stages
 
 ### Stage A — Free setup
-- [x] Create the project repository scaffold.
+- [x] Create project repository scaffold.
 - [x] Add Android build documentation and a non-destructive host capacity check.
-- [ ] Open the repository in Codespaces if available.
-- [ ] Run the lightweight validation workflow.
-- [ ] Check actual CPU architecture, RAM, free disk and any Codespaces quota before downloading source.
+- [x] Add a checkout helper that refuses to fetch on undersized hosts.
+- [x] Confirm current Codespaces capacity is insufficient.
+- [ ] Run lightweight GitHub Actions validation.
+- [ ] Find a supported host with adequate disk/RAM without incurring charges.
 
 ### Stage B — Chromium baseline
-- [ ] Use a supported Linux x86-64 machine with enough disk and memory.
+- [ ] Use a supported Linux x86-64 machine with at least 100 GB free disk and 8 GB RAM minimum; more than 16 GB RAM is recommended.
 - [ ] Install prerequisites from the official Chromium Android build guide.
-- [ ] Fetch Chromium with `depot_tools`.
+- [ ] Fetch Android Chromium with `depot_tools`.
 - [ ] Record the exact upstream Chromium commit.
 - [ ] Complete an unmodified ARM64 Android APK build.
 - [ ] Install and test the APK on a test device.
@@ -28,7 +30,7 @@ A full Chromium Android build is not a normal Gradle-only app build. It needs Ch
 ### Stage C — K.O.T.A.K customization
 - [ ] Identify product identity and Android browser UI resources in the pinned revision.
 - [ ] Create small, reviewable patches under `patches/`.
-- [ ] Apply the patches and rebuild.
+- [ ] Apply patches and rebuild.
 - [ ] Test launch, navigation, tabs, downloads, permissions, accessibility and security updates.
 
 ### Stage D — Release
@@ -46,12 +48,11 @@ A full Chromium Android build is not a normal Gradle-only app build. It needs Ch
 Run these before any large download:
 
 ```bash
+bash scripts/check-build-capacity.sh
 uname -m
 nproc
 free -h
-df -h .
-git --version
-python3 --version
+df -h "$HOME"
 ```
 
-If the architecture is not x86-64, or free disk/memory is below current Chromium requirements, stop before running `fetch --nohooks chromium`. Codespaces availability and quota depend on the account and organization settings.
+Do not run `fetch` unless the host meets the current upstream requirements and quota/storage implications are understood.
