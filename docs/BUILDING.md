@@ -1,7 +1,7 @@
 # Building K.O.T.A.K Browser
 
 ## Important prerequisites
-Chromium is a very large native project. Before checkout, provision a supported x86-64 Linux host with ample RAM and at least roughly 100 GB free disk space; additional storage is strongly recommended. Check the current upstream instructions because requirements change.
+Chromium is a very large native project. For Android, upstream documents a supported x86-64 Linux host with at least 8 GB RAM, recommends more than 16 GB RAM, and requires at least 100 GB free disk space. Check the current upstream instructions because requirements can change.
 
 Official documentation:
 - Source checkout: https://www.chromium.org/developers/how-tos/get-the-code/
@@ -11,52 +11,46 @@ Official documentation:
 - macOS: https://chromium.googlesource.com/chromium/src/+/main/docs/mac_build_instructions.md
 
 ## Recommended workflow
-1. Use GitHub Codespaces or a phone browser to edit this small repository.
-2. Use a persistent Linux x86-64 VM for the Chromium source checkout and Linux/Android builds.
-3. Use compatible Windows and macOS hosts for native desktop builds.
-4. Keep build outputs outside this repository and publish only intentional artifacts.
-5. Record the Chromium revision and build configuration for each artifact.
+1. Use GitHub Codespaces or the GitHub web editor for this small repository.
+2. Run `bash scripts/check-build-capacity.sh` before downloading anything.
+3. Use a supported Linux x86-64 host for Android Chromium source checkout/build.
+4. Use compatible Windows and macOS hosts for native desktop builds.
+5. Keep build outputs outside this repository and publish only intentional artifacts.
 
-## Linux source checkout
-Install the prerequisites from the official Linux guide first. Then:
-
-```bash
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git "$HOME/depot_tools"
-export PATH="$HOME/depot_tools:$PATH"
-mkdir -p "$HOME/chromium-work"
-cd "$HOME/chromium-work"
-fetch --nohooks chromium
-cd src
-gclient runhooks
-```
-
-Do not start this checkout until disk space and quota are confirmed. It downloads a large source tree and dependencies.
-
-## Linux desktop baseline
-From the Chromium `src` directory, after installing documented dependencies and running hooks:
+## Android source checkout
+After the host passes the preflight and the documented prerequisites are installed, the Android-first helper is:
 
 ```bash
-gn gen out/KotakLinux
-autoninja -C out/KotakLinux chrome
+bash scripts/sync-chromium.sh
 ```
+
+It refuses to start if available disk or memory is below its configured thresholds. It uses the upstream Android-specific `fetch --nohooks android` workflow. The checkout and hooks can take substantial time and storage.
 
 ## Android ARM64 baseline
-From the same source tree, after following the Android-specific setup guide:
+After checkout, dependencies and hooks are ready, from Chromium's `src` directory:
 
 ```bash
 gn gen out/KotakAndroid --args='target_os="android" target_cpu="arm64"'
 autoninja -C out/KotakAndroid chrome_public_apk
 ```
 
-Verify the target name and arguments against the exact pinned Chromium revision. These are upstream baseline builds, not yet K.O.T.A.K-branded release artifacts.
+Verify target names and build arguments against the exact pinned Chromium revision. This creates an upstream baseline, not yet a K.O.T.A.K-branded release.
+
+## Linux desktop baseline
+From Chromium's `src` directory on a suitable Linux host:
+
+```bash
+gn gen out/KotakLinux
+autoninja -C out/KotakLinux chrome
+```
 
 ## Windows and macOS
-Follow the current upstream platform guide on a supported native host. Do not assume a Linux runner can cross-build a supported release for every desktop OS.
+Follow the current upstream platform guide on a supported native host. Do not assume a Linux runner can produce supported native release builds for every desktop OS.
 
 ## Patch workflow
 - Record the exact upstream commit in a revision manifest before customizing.
 - Keep each customization as a small patch under `patches/`.
-- Apply and test patches against the pinned revision.
+- Test patches against the pinned revision.
 - Rebase/review patches when updating Chromium.
 - Do not use an unreviewed floating `main` revision for release builds.
 
