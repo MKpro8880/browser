@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Android-first Chromium checkout helper.
-# It intentionally refuses to start a large checkout on undersized hosts.
+# Refuses to start a large checkout on undersized hosts.
 CHROMIUM_WORK_DIR="${CHROMIUM_WORK_DIR:-$HOME/chromium-android-work}"
 DEPOT_TOOLS_DIR="${DEPOT_TOOLS_DIR:-$HOME/depot_tools}"
 MIN_FREE_GB="${MIN_FREE_GB:-100}"
@@ -51,7 +51,6 @@ if [[ -d "$CHROMIUM_WORK_DIR/src/.git" ]]; then
 else
   mkdir -p "$CHROMIUM_WORK_DIR"
   cd "$CHROMIUM_WORK_DIR"
-  # Android-specific checkout, as documented by Chromium upstream.
   fetch --nohooks android
   cd src
   gclient runhooks
