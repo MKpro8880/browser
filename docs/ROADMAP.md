@@ -5,22 +5,25 @@
 - [x] Add source checkout/build helper scripts
 - [x] Add lightweight repository validation workflow
 - [x] Add Android-first plan and free-workflow guidance
-- [x] Add non-destructive build-capacity preflight
-- [ ] Confirm a suitable build host and available quota
-- [ ] Pin an upstream Chromium revision
+- [x] Add revision-aware source investigation plan
+- [x] Add Android customization notes and upstream revision record
+- [x] Add read-only source inspection and patch-check scripts
+- [x] Confirm current Codespaces capacity is insufficient
+- [ ] Run lightweight GitHub Actions validation
+- [ ] Find a suitable build host without incurring charges
 
 ## Phase 1 — Reproducible Android baseline
-- [ ] Check host architecture, RAM and free disk
+- [ ] Pin an actual upstream Chromium commit
 - [ ] Complete a Chromium source checkout on a supported Linux x86-64 host
 - [ ] Build unmodified upstream ARM64 Android APK
 - [ ] Record revision, build arguments, toolchain and artifact hashes
 - [ ] Install and smoke-test on an Android device
 
 ## Phase 2 — K.O.T.A.K branding
-- [ ] Create app icon and wordmark
-- [ ] Locate product identity resources in the pinned Chromium revision
-- [ ] Add branding as small reviewable patches
-- [ ] Rebuild and test the branded Android APK
+- [ ] Inspect actual product identity resources in the pinned revision
+- [ ] Create small reviewable branding patches
+- [ ] Validate patches against the exact pinned checkout
+- [ ] Rebuild and test branded Android APK
 
 ## Phase 3 — Browser experience
 - [ ] Review toolbar, address bar, tab and menu UX
@@ -39,3 +42,6 @@
 - [ ] Rebase and test custom patches
 - [ ] Publish notices and third-party attributions
 - [ ] Document signing, release and rollback procedures
+
+## Current status
+No upstream revision is pinned, no branding patch is active, and no APK has been built or tested. See [the revision-aware investigation plan](SOURCE_INVESTIGATION.md).
