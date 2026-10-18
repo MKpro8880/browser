@@ -1,35 +1,35 @@
 # K.O.T.A.K Browser
 
-A futuristic browser project based on the **actual Chromium source** for Android, Windows, Linux, and macOS.
+A futuristic downstream customization of the **actual Chromium source** for Android, Windows, Linux, and macOS.
 
-> **Status:** Foundation scaffold. This repository does not yet contain Chromium source or a working branded browser build.
+> **Status:** Project scaffold and Android-first build plan. This repository does not yet contain Chromium source or a working K.O.T.A.K-branded APK.
 
 ## Targets
 - Android (ARM64 first)
 - Linux (x86-64)
 - Windows (x86-64)
-- macOS (Apple Silicon and Intel, subject to upstream support)
+- macOS (supported Mac/Xcode configurations)
 
-## Project strategy
-- Keep this repository small: store our documentation, scripts, branding, and patches here.
-- Fetch Chromium with Google's `depot_tools` into a separate working directory.
-- Pin and record the exact upstream Chromium revision used for every build.
-- Keep platform builds separate; macOS builds require macOS/Xcode infrastructure.
-- Build upstream Chromium first, then introduce small, reviewable K.O.T.A.K changes.
-- Never commit Chromium's generated output, signing keys, tokens, or credentials.
+## Android-first strategy
+1. Keep this repository small: store documentation, scripts, branding, and downstream patches.
+2. Use GitHub/Codespaces for editing and lightweight checks when available.
+3. Check the host's architecture, RAM, free disk and quotas before any large download.
+4. Fetch Chromium with Google's `depot_tools` only on a supported, sufficiently provisioned build host.
+5. Build and test an unmodified Android APK before applying K.O.T.A.K branding.
+6. Pin the upstream Chromium revision and preserve a regular security-update process.
 
 ## Repository map
-- `docs/` — architecture, build guide, roadmap
+- `docs/` — architecture, build instructions, Android plan, free workflow, roadmap
 - `branding/` — product identity and assets
-- `patches/` — patch series for our Chromium customizations
-- `scripts/` — source checkout and local build helpers
-- `.github/workflows/` — lightweight repository validation
+- `patches/` — patches for our Chromium customizations
+- `scripts/` — source checkout, build and preflight helpers
+- `.github/workflows/` — lightweight validation
 
-## Quick start
-Read [the build guide](docs/BUILDING.md) before provisioning a machine. A complete Chromium checkout and build require a large amount of disk space, memory, and time. A standard phone, Termux session, or small Codespace is not an appropriate full-build machine.
+## Can we build without paid cloud space?
+We can continue coding and run small checks using GitHub and available free tools. A full Chromium Android build is not guaranteed on a default Codespace or hosted Actions runner because of source size, disk, RAM, runtime, and account quota limits. See [Free workflow](docs/FREE_WORKFLOW.md) and [Android plan](docs/ANDROID_PLAN.md).
 
 ## Security and licensing
-Chromium contains third-party components with different licenses and attribution requirements. Review upstream notices and policies before redistributing builds. Plan regular upstream security updates from the beginning.
+Chromium contains components with different licenses and attribution requirements. Review upstream notices before redistribution. Never commit signing keys, access tokens, or private credentials.
 
 ## License
-This project has not yet selected a project-specific license. Chromium and its third-party components retain their respective licenses; see the upstream Chromium repository and notices before copying or redistributing code.
+No project-specific license has been selected yet. Chromium and third-party components retain their respective licenses.
