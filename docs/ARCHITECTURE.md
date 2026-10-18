@@ -1,10 +1,15 @@
 # Architecture
 
+## Project identity
+- **Company / organization:** `kotak_empire`
+- **Browser product:** K.O.T.A.K Browser
+- **Visual identity:** Not decided yet. Keep the implementation neutral; do not assume a logo, palette, slogan, or permanent brand assets.
+
 ## Goal
 K.O.T.A.K Browser is a downstream customization of the Chromium browser, not a WebView or Electron wrapper.
 
 ## Source-of-truth model
-1. This repository stores project documentation, branding, scripts, and downstream patches.
+1. This repository stores project documentation, product identity notes, scripts, and downstream patches.
 2. A separate working directory contains Chromium's source checkout managed by `depot_tools`.
 3. Every build records the upstream Chromium commit/revision, toolchain details, applied patches, and build arguments.
 4. Changes are applied as small patches and reviewed before updating the pinned upstream revision.
@@ -21,10 +26,10 @@ K.O.T.A.K Browser is a downstream customization of the Chromium browser, not a W
 A Linux build does not produce native Windows or macOS binaries. Android and desktop builds use different GN arguments and targets.
 
 ## Customization layers
-- Product identity: name, icons, metadata, startup assets.
-- Browser UX: toolbar, tabs, menus, settings, navigation.
+- Product identity: company attribution, product name, icons and metadata when approved.
+- Browser UX: toolbar, tabs, menus, settings and navigation.
 - Platform-specific behavior: Android UI versus desktop window/tab UI.
-- Release engineering: signing, packaging, update channels, notices.
+- Release engineering: signing, packaging, update channels and notices.
 
 ## Non-goals for the first milestone
 - Rewriting Chromium's rendering engine.
