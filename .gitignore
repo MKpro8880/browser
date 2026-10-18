@@ -1,0 +1,28 @@
+# Chromium source/build output (keep outside this repository where possible)
+/chromium/
+/src/
+/out/
+/build-output/
+*.apk
+*.aab
+*.dmg
+*.pkg
+*.exe
+*.msi
+*.deb
+*.rpm
+*.zip
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.pyc
