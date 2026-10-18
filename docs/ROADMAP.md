@@ -1,5 +1,10 @@
 # Roadmap
 
+## Project identity
+- Company / organization: `kotak_empire`
+- Browser product: K.O.T.A.K Browser
+- Logo and visual branding: undecided; do not create or apply permanent brand assets yet.
+
 ## Phase 0 — Foundation
 - [x] Create project documentation and repository layout
 - [x] Add source checkout/build helper scripts
@@ -19,15 +24,16 @@
 - [ ] Record revision, build arguments, toolchain and artifact hashes
 - [ ] Install and smoke-test on an Android device
 
-## Phase 2 — K.O.T.A.K branding
+## Phase 2 — Product-name customization
 - [ ] Inspect actual product identity resources in the pinned revision
-- [ ] Create small reviewable branding patches
+- [ ] Add only the approved company/product name changes
 - [ ] Validate patches against the exact pinned checkout
-- [ ] Rebuild and test branded Android APK
+- [ ] Rebuild and test the customized Android APK
+- [ ] Decide whether to create a logo and visual identity later
 
 ## Phase 3 — Browser experience
 - [ ] Review toolbar, address bar, tab and menu UX
-- [ ] Customize theme and startup experience
+- [ ] Customize theme and startup experience after visual identity is chosen
 - [ ] Test bookmarks, history, downloads and settings
 - [ ] Test accessibility, permissions, touch and keyboard behavior
 
