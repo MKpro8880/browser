@@ -1,6 +1,11 @@
 # K.O.T.A.K Browser
 
-A futuristic downstream customization of the **actual Chromium source** for Android, Windows, Linux, and macOS.
+A downstream customization of the **actual Chromium source** for Android, Windows, Linux, and macOS.
+
+## Project identity
+- **Company / organization:** `kotak_empire`
+- **Browser product:** K.O.T.A.K Browser
+- **Logo, colors, and visual brand system:** Not decided yet. Do not invent or apply permanent branding until chosen.
 
 > **Status:** Project scaffold and Android-first build plan. This repository does not yet contain Chromium source or a working K.O.T.A.K-branded APK.
 
@@ -11,16 +16,16 @@ A futuristic downstream customization of the **actual Chromium source** for Andr
 - macOS (supported Mac/Xcode configurations)
 
 ## Android-first strategy
-1. Keep this repository small: store documentation, scripts, branding, and downstream patches.
+1. Keep this repository small: store documentation, scripts, branding notes, and downstream patches.
 2. Use GitHub/Codespaces for editing and lightweight checks when available.
 3. Check the host's architecture, RAM, free disk and quotas before any large download.
 4. Fetch Chromium with Google's `depot_tools` only on a supported, sufficiently provisioned build host.
-5. Build and test an unmodified Android APK before applying K.O.T.A.K branding.
+5. Build and test an unmodified Android APK before applying product-name or visual customizations.
 6. Pin the upstream Chromium revision and preserve a regular security-update process.
 
 ## Repository map
 - `docs/` — architecture, build instructions, Android plan, free workflow, roadmap
-- `branding/` — product identity and assets
+- `branding/` — product identity notes and future assets
 - `patches/` — patches for our Chromium customizations
 - `scripts/` — source checkout, build and preflight helpers
 - `.github/workflows/` — lightweight validation
