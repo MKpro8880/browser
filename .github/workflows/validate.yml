@@ -1,0 +1,33 @@
+name: Validate K.O.T.A.K project
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+
+      - name: Validate required files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f README.md
+          test -f docs/ARCHITECTURE.md
+          test -f docs/BUILDING.md
+          test -f docs/ROADMAP.md
+          test -f patches/series
+          test -x scripts/sync-chromium.sh || bash -n scripts/sync-chromium.sh
+          bash -n scripts/build-linux.sh
+          bash -n scripts/build-android.sh
+          echo "K.O.T.A.K repository scaffold is valid."
+
+# This workflow validates project files only. Full Chromium builds need
+# dedicated, properly provisioned platform-specific hosts and are not run here.
