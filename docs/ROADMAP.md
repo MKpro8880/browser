@@ -12,6 +12,7 @@
 - [x] Add Android-first plan and free-workflow guidance
 - [x] Add revision-aware source investigation plan
 - [x] Add Android customization notes and upstream revision record
+- [x] Add Android baseline acceptance checklist
 - [x] Add read-only source inspection and patch-check scripts
 - [x] Confirm current Codespaces capacity is insufficient
 - [ ] Run lightweight GitHub Actions validation
