@@ -23,6 +23,9 @@ jobs:
           test -f docs/ARCHITECTURE.md
           test -f docs/BUILDING.md
           test -f docs/ANDROID_PLAN.md
+          test -f docs/ANDROID_CUSTOMIZATION.md
+          test -f docs/SOURCE_INVESTIGATION.md
+          test -f docs/UPSTREAM_REVISION.md
           test -f docs/FREE_WORKFLOW.md
           test -f docs/ROADMAP.md
           test -f patches/series
@@ -30,6 +33,8 @@ jobs:
           bash -n scripts/build-linux.sh
           bash -n scripts/build-android.sh
           bash -n scripts/check-build-capacity.sh
+          bash -n scripts/inspect-chromium-tree.sh
+          bash -n scripts/check-patches.sh
           echo "K.O.T.A.K repository scaffold is valid."
 
-# This workflow performs lightweight checks only. It does not fetch or build Chromium.
+# Lightweight validation only. This workflow does not fetch or build Chromium.
