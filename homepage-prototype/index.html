@@ -3,85 +3,349 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f8fafc">
+  <meta name="theme-color" content="#f7f8fb">
+  <meta name="description" content="K.O.T.A.K Browser — a calm, futuristic home for the web.">
   <title>K.O.T.A.K Browser — New Tab</title>
   <style>
-    :root { color-scheme: light; --bg:#f8fafc; --ink:#111827; --muted:#64748b; --line:#e2e8f0; --card:#fff; --accent:#0f172a; }
-    * { box-sizing:border-box; }
-    body { margin:0; min-height:100svh; background:var(--bg); color:var(--ink); font:16px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-    main { width:min(720px,100%); margin:0 auto; padding: max(24px, env(safe-area-inset-top)) 22px max(24px, env(safe-area-inset-bottom)); }
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fb; --ink: #171a22; --muted: #717784; --line: #e3e6ed;
+      --glass: rgba(255,255,255,.72); --glass-strong: rgba(255,255,255,.9);
+      --accent: #5c68d9; --accent-soft: #eceeff; --shadow: 0 18px 55px rgba(38,46,78,.075);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    html { min-height:100%; scroll-behavior:smooth; }
+    body {
+      margin:0; min-height:100svh; overflow-x:hidden; position:relative;
+      background: radial-gradient(ellipse at 50% 0%, #fff 0, #f8f9fc 38%, #f1f3f8 100%);
+      color:var(--ink); font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    button,input { font:inherit; }
+    button,a,input { -webkit-tap-highlight-color:transparent; }
+    button { color:inherit; }
+    button:focus-visible,a:focus-visible,input:focus-visible { outline:3px solid #8992f5; outline-offset:3px; }
+    #aurora { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:.48; }
+    .orb { position:fixed; width:340px; height:340px; border-radius:50%; filter:blur(75px); opacity:.22; pointer-events:none; z-index:0; animation: drift 18s ease-in-out infinite alternate; }
+    .orb.one { top:7%; left:-170px; background:#c9ceff; }
+    .orb.two { top:32%; right:-200px; background:#d6e9ff; animation-delay:-8s; }
+    @keyframes drift { from { transform:translate3d(0,0,0) scale(.9); } to { transform:translate3d(36px,24px,0) scale(1.12); } }
+    main { position:relative; z-index:1; width:min(900px,100%); margin:0 auto; padding:max(22px,env(safe-area-inset-top)) 22px max(26px,env(safe-area-inset-bottom)); }
     header { display:flex; align-items:center; gap:12px; }
-    .logo { width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:var(--accent);color:white;font-weight:750;letter-spacing:-1px; }
-    .brand { font-size:1.05rem;font-weight:750;letter-spacing:.02em; }
-    .tagline { color:var(--muted);font-size:.82rem;margin-top:1px; }
-    .settings { margin-left:auto; border:1px solid var(--line);background:var(--card);color:var(--muted);width:42px;height:42px;border-radius:14px;cursor:pointer;font-size:1.1rem; }
-    .hero { text-align:center;margin:clamp(62px,15vh,132px) 0 30px; }
-    h1 { margin:0;font-size:clamp(2.25rem,8vw,3.5rem);line-height:1.05;letter-spacing:-.065em; }
-    .intro { color:var(--muted);margin:14px 0 0;font-size:.98rem; }
-    form { display:flex;align-items:center;gap:10px;padding:7px 8px 7px 17px;border:1px solid var(--line);border-radius:999px;background:var(--card);box-shadow:0 8px 30px #0f172a08; }
-    form:focus-within { border-color:#94a3b8;box-shadow:0 0 0 4px #cbd5e133; }
-    .search-icon { color:var(--muted);font-size:1.15rem; }
-    input { flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;padding:10px 0; }
-    input::placeholder { color:#94a3b8; }
-    .go { width:40px;height:40px;border:0;border-radius:50%;background:var(--accent);color:#fff;font-size:1.1rem;cursor:pointer; }
-    .section-head { display:flex;align-items:center;justify-content:space-between;margin:34px 2px 14px; }
-    h2 { font-size:.88rem;margin:0;font-weight:650; }
-    .hint { color:var(--muted);font-size:.75rem; }
-    .shortcuts { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px; }
-    .shortcut { display:flex;flex-direction:column;align-items:center;gap:10px;padding:15px 4px 12px;text-decoration:none;color:var(--ink);border-radius:16px; }
-    .shortcut:hover,.shortcut:focus-visible { background:#eef2f7;outline:none; }
-    .tile { width:48px;height:48px;border-radius:16px;background:#e2e8f0;display:grid;place-items:center;font-size:1rem;font-weight:750;color:#334155; }
-    .tile.red { background:#fee2e2;color:#991b1b; }.tile.green { background:#d1fae5;color:#065f46; }.tile.blue { background:#dbeafe;color:#1d4ed8; }
-    .shortcut span:last-child { font-size:.78rem;color:#475569; }
-    footer { display:flex;align-items:center;justify-content:center;gap:7px;color:#94a3b8;font-size:.75rem;margin-top:clamp(45px,12vh,100px); }
-    @media (max-width:380px) { main { padding-left:16px;padding-right:16px; }.shortcuts { gap:2px; }.tile { width:44px;height:44px; } }
+    .logo { width:44px;height:44px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.95);border-radius:15px;background:linear-gradient(145deg,#fff,#e8ebf3);box-shadow:0 5px 18px #29324b12;color:#30364c;font-weight:800;letter-spacing:-1px; }
+    .brand { font-size:1rem;font-weight:780;letter-spacing:.09em; }
+    .tagline { color:var(--muted);font-size:.78rem;margin-top:1px; }
+    .header-right { margin-left:auto; display:flex;align-items:center;gap:9px; }
+    .live-pill { display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:8px 11px;background:#ffffff80;color:#596070;font-size:.73rem;white-space:nowrap; }
+    .live-dot { width:7px;height:7px;border-radius:50%;background:#6fbd9b;box-shadow:0 0 0 4px #6fbd9b20; }
+    .icon-button { width:40px;height:40px;border:1px solid var(--line);border-radius:14px;background:#ffffff9c;cursor:pointer;display:grid;place-items:center;color:#646b7b; }
+    .hero { text-align:center; margin:clamp(34px,7vh,68px) 0 23px; animation:rise .75s cubic-bezier(.2,.8,.2,1) both; }
+    .eyebrow { display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border:1px solid #e6e8f2;border-radius:999px;background:#ffffff80;color:#737b91;font-size:.72rem;letter-spacing:.055em;text-transform:uppercase;margin-bottom:17px; }
+    .eyebrow-mark { width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#8c96ff,#b7a4ef); }
+    h1 { margin:0;font-size:clamp(2.45rem,8vw,4.6rem);line-height:1.02;letter-spacing:-.075em;font-weight:680; }
+    h1 span { color:#7d86a0; background:linear-gradient(100deg,#a0a8c0,#6d76b6 48%,#a4a8b8);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+    .intro { color:var(--muted);margin:15px 0 0;font-size:clamp(.9rem,2.5vw,1rem); }
+    .search-wrap { max-width:700px;margin:0 auto;animation:rise .85s .08s cubic-bezier(.2,.8,.2,1) both; }
+    .search-form { display:flex;align-items:center;gap:11px;padding:8px 9px 8px 18px;border:1px solid #e0e3ec;border-radius:20px;background:var(--glass-strong);box-shadow:0 15px 45px #343e6510,inset 0 1px 0 #fff;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);transition:border-color .2s,box-shadow .2s,transform .2s; }
+    .search-form:focus-within { border-color:#b4baf2;box-shadow:0 0 0 4px #929cf21c,0 18px 48px #343e6512;transform:translateY(-1px); }
+    .search-symbol { width:22px;flex:none;color:#7c8395;font-size:1.25rem;text-align:center; }
+    #query { flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);padding:11px 0;font-size:.96rem; }
+    #query::placeholder { color:#9a9faf; }
+    .key-hint { color:#a0a5b2;font-size:.7rem;border:1px solid #e6e8ee;background:#f8f9fc;padding:4px 7px;border-radius:7px;white-space:nowrap; }
+    .go { width:42px;height:42px;flex:none;border:0;border-radius:14px;background:linear-gradient(145deg,#737de9,#5965d0);color:white;font-size:1.15rem;cursor:pointer;box-shadow:0 5px 14px #6974dc35;transition:transform .2s,filter .2s; }
+    .go:hover { transform:translateY(-2px);filter:brightness(1.04); }
+    .command-hint { text-align:center;color:#9298a7;font-size:.73rem;margin:11px 0 0; }
+    .command-hint code { color:#6872bf;background:#eeefff;border-radius:5px;padding:2px 5px;font:inherit; }
+    .section-head { display:flex;align-items:end;justify-content:space-between;gap:12px;margin:32px 2px 13px; }
+    h2 { font-size:.88rem;margin:0;font-weight:700;letter-spacing:-.01em; }
+    .hint { color:#9399a8;font-size:.73rem; }
+    .glass-card { border:1px solid #ffffffd9;background:var(--glass);border-radius:var(--radius);box-shadow:var(--shadow),inset 0 1px 0 #fff;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px); }
+    .shortcuts { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px; }
+    .shortcut { display:flex;min-width:0;flex-direction:column;align-items:center;gap:9px;padding:16px 5px 14px;text-decoration:none;color:var(--ink);border:1px solid transparent;border-radius:19px;transition:transform .22s,background .22s,border-color .22s; }
+    .shortcut:hover { background:#ffffffa8;border-color:#fff;transform:translateY(-3px); }
+    .tile { width:49px;height:49px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#e9ecf5);border:1px solid #fff;box-shadow:0 6px 16px #2d36500d;color:#5e6680;font-size:.95rem;font-weight:780; }
+    .tile.violet { color:#6668c9;background:linear-gradient(145deg,#fff,#e9eaff); }
+    .tile.rose { color:#bd728e;background:linear-gradient(145deg,#fff,#f8eaf0); }
+    .tile.mint { color:#579c8b;background:linear-gradient(145deg,#fff,#e5f5f0); }
+    .tile.blue { color:#5687bb;background:linear-gradient(145deg,#fff,#e5f1fc); }
+    .shortcut-name { font-size:.78rem;color:#535a6b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%; }
+    .dashboard { display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:14px;margin-top:22px; }
+    .widget { padding:18px;min-width:0;animation:rise .7s .15s both; }
+    .widget-head { display:flex;align-items:center;gap:9px; }
+    .widget-icon { display:grid;place-items:center;width:33px;height:33px;border-radius:11px;background:#f0f1ff;color:#6a72ca;font-size:1rem; }
+    .widget-title { font-weight:700;font-size:.84rem; }
+    .widget-subtitle { font-size:.72rem;color:#8b91a0;margin-top:1px; }
+    .weather-form { display:flex;gap:7px;margin-top:16px; }
+    .weather-form input { min-width:0;flex:1;width:100%;padding:10px 12px;border:1px solid #e5e7ef;border-radius:12px;background:#ffffffb5;color:var(--ink);outline:0;font-size:.82rem; }
+    .weather-form input::placeholder { color:#a0a5b1; }
+    .small-button { flex:none;padding:9px 12px;border:1px solid #e0e3f5;border-radius:12px;background:#f0f1ff;color:#5f68c6;font-size:.78rem;font-weight:650;cursor:pointer; }
+    .weather-result { margin-top:13px;min-height:44px;display:flex;align-items:center;gap:12px; }
+    .weather-symbol { font-size:1.8rem;line-height:1; }
+    .weather-temp { font-size:1.55rem;letter-spacing:-.05em;font-weight:650;line-height:1.1; }
+    .weather-detail { color:var(--muted);font-size:.74rem;margin-top:3px; }
+    .status { color:#858b99;font-size:.76rem; }
+    .status.error { color:#b45365; }
+    .command-card { display:flex;flex-direction:column; }
+    .command-list { display:flex;flex-wrap:wrap;gap:7px;margin-top:16px; }
+    .command-chip { border:1px solid #e5e7ef;background:#ffffffa6;border-radius:999px;padding:7px 10px;font-size:.72rem;color:#626a7c;cursor:pointer;transition:background .2s,border-color .2s; }
+    .command-chip:hover { background:#f0f1ff;border-color:#d8dcff;color:#5b64c2; }
+    .command-note { color:#969baa;font-size:.72rem;margin:12px 0 0; }
+    footer { display:flex;align-items:center;justify-content:center;gap:8px;color:#a0a5b1;font-size:.72rem;margin:30px 0 0; }
+    .footer-mark { color:#8188d8; }
+    .toast { position:fixed;z-index:5;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;pointer-events:none;max-width:calc(100% - 32px);padding:10px 15px;border:1px solid #fff;border-radius:14px;background:#fffF;box-shadow:var(--shadow);color:#555d70;font-size:.8rem;transition:opacity .2s,transform .2s; }
+    .toast.show { opacity:1;transform:translate(-50%,0); }
+    @keyframes rise { from { opacity:0;transform:translateY(12px); } to { opacity:1;transform:translateY(0); } }
+    @media (max-width:620px) {
+      main { padding-left:17px;padding-right:17px; }
+      .hero { margin-top:clamp(31px,6vh,52px); }
+      .dashboard { grid-template-columns:1fr;gap:12px;margin-top:16px; }
+      .widget { padding:16px; }
+      .shortcuts { gap:3px; }
+      .shortcut { padding:12px 3px; }
+      .tile { width:45px;height:45px;border-radius:15px; }
+      .key-hint { display:none; }
+      .live-pill { padding:7px 9px; }
+    }
+    @media (max-width:360px) {
+      main { padding-left:13px;padding-right:13px; }
+      .brand { font-size:.92rem; }
+      .tagline { font-size:.72rem; }
+      .live-pill { display:none; }
+      .shortcut-name { font-size:.72rem; }
+      .search-form { padding-left:12px;gap:8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { scroll-behavior:auto !important;animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important; }
+      #aurora,.orb { display:none; }
+    }
   </style>
 </head>
 <body>
+  <canvas id="aurora" aria-hidden="true"></canvas>
+  <div class="orb one" aria-hidden="true"></div><div class="orb two" aria-hidden="true"></div>
   <main>
     <header>
       <div class="logo" aria-hidden="true">K.</div>
       <div><div class="brand">K.O.T.A.K</div><div class="tagline">A quieter way to browse.</div></div>
-      <button class="settings" type="button" aria-label="Homepage settings" title="Homepage settings" id="settings">⋯</button>
+      <div class="header-right">
+        <div class="live-pill"><span class="live-dot" aria-hidden="true"></span><span id="clock" aria-label="Current time">Local time</span></div>
+        <button class="icon-button" type="button" id="focus-search" aria-label="Focus search" title="Focus search">⌕</button>
+      </div>
     </header>
 
     <section class="hero" aria-labelledby="heading">
-      <h1 id="heading">Explore.</h1>
-      <p class="intro">What would you like to find today?</p>
+      <div class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> Your personal launchpad</div>
+      <h1 id="heading">A little more <span>possibility.</span></h1>
+      <p class="intro">Where do you want to go today?</p>
     </section>
 
-    <form id="search-form" role="search">
-      <span class="search-icon" aria-hidden="true">⌕</span>
-      <input id="query" name="q" type="text" placeholder="Search or enter a website" aria-label="Search or enter a website" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
-      <button class="go" type="submit" aria-label="Search">→</button>
-    </form>
+    <section class="search-wrap" aria-label="Search and commands">
+      <form class="search-form" id="search-form" role="search">
+        <span class="search-symbol" aria-hidden="true">⌕</span>
+        <input id="query" name="q" type="text" placeholder="Search the web or try a command…" aria-label="Search the web or enter a command" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <span class="key-hint" aria-hidden="true">↵ Enter</span>
+        <button class="go" type="submit" aria-label="Search or run command">↗</button>
+      </form>
+      <p class="command-hint">Try <code>weather</code>, <code>time</code>, <code>youtube</code> or ask anything.</p>
+    </section>
 
-    <div class="section-head"><h2>Quick links</h2><span class="hint">Your everyday web</span></div>
-    <nav class="shortcuts" aria-label="Quick links">
-      <a class="shortcut" href="https://www.youtube.com/"><span class="tile red">▶</span><span>YouTube</span></a>
-      <a class="shortcut" href="https://github.com/"><span class="tile">GH</span><span>GitHub</span></a>
-      <a class="shortcut" href="https://chatgpt.com/"><span class="tile green">AI</span><span>ChatGPT</span></a>
-      <a class="shortcut" href="https://www.google.com/"><span class="tile blue">G</span><span>Google</span></a>
-    </nav>
+    <section aria-labelledby="links-title">
+      <div class="section-head"><h2 id="links-title">Your shortcuts</h2><span class="hint">A few favourite places</span></div>
+      <nav class="shortcuts" aria-label="Website shortcuts">
+        <a class="shortcut" href="https://www.youtube.com/" data-site="youtube"><span class="tile rose" aria-hidden="true">▶</span><span class="shortcut-name">YouTube</span></a>
+        <a class="shortcut" href="https://github.com/" data-site="github"><span class="tile" aria-hidden="true">GH</span><span class="shortcut-name">GitHub</span></a>
+        <a class="shortcut" href="https://chatgpt.com/" data-site="chatgpt"><span class="tile mint" aria-hidden="true">✳</span><span class="shortcut-name">ChatGPT</span></a>
+        <a class="shortcut" href="https://www.google.com/" data-site="google"><span class="tile blue" aria-hidden="true">G</span><span class="shortcut-name">Google</span></a>
+      </nav>
+    </section>
 
-    <footer><span aria-hidden="true">◈</span><span>Simple by design. Your browsing, your choice.</span></footer>
+    <section class="dashboard" aria-label="Your dashboard">
+      <article class="glass-card widget" aria-labelledby="weather-title">
+        <div class="widget-head">
+          <div class="widget-icon" aria-hidden="true">☼</div>
+          <div><div class="widget-title" id="weather-title">Weather, wherever you are</div><div class="widget-subtitle">A quick look outside</div></div>
+        </div>
+        <form class="weather-form" id="weather-form">
+          <label for="city" class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">City for weather</label>
+          <input id="city" name="city" placeholder="Enter a city…" autocomplete="address-level2">
+          <button class="small-button" type="submit">Check</button>
+        </form>
+        <div class="weather-result" id="weather-result" aria-live="polite">
+          <span class="weather-symbol" aria-hidden="true">☁</span>
+          <div><div class="status">Choose a city to see local weather.</div><div class="weather-detail">Weather data loads when requested.</div></div>
+        </div>
+      </article>
+
+      <article class="glass-card widget command-card" aria-labelledby="command-title">
+        <div class="widget-head">
+          <div class="widget-icon" aria-hidden="true">⌘</div>
+          <div><div class="widget-title" id="command-title">Quick commands</div><div class="widget-subtitle">Small shortcuts, less typing</div></div>
+        </div>
+        <div class="command-list" aria-label="Available commands">
+          <button class="command-chip" type="button" data-command="weather">☼ Weather</button>
+          <button class="command-chip" type="button" data-command="time">◷ Local time</button>
+          <button class="command-chip" type="button" data-command="youtube">▶ YouTube</button>
+          <button class="command-chip" type="button" data-command="github">GH GitHub</button>
+          <button class="command-chip" type="button" data-command="clear">✕ Clear search</button>
+        </div>
+        <p class="command-note">Type a command above, or tap one here.</p>
+      </article>
+    </section>
+
+    <footer><span class="footer-mark" aria-hidden="true">✧</span><span>Thoughtfully simple. Ready for what’s next.</span></footer>
   </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script>
-    const form = document.querySelector('#search-form');
-    const input = document.querySelector('#query');
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const value = input.value.trim();
-      if (!value) { input.focus(); return; }
-      const looksLikeUrl = /^(https?:\/\/)/i.test(value) || (/^[^\s.]+\.[^\s]+$/.test(value) && !value.includes(' '));
-      const destination = looksLikeUrl
-        ? ( /^https?:\/\//i.test(value) ? value : 'https://' + value )
-        : 'https://www.google.com/search?q=' + encodeURIComponent(value);
-      window.location.href = destination;
-    });
-    document.querySelector('#settings').addEventListener('click', () => {
-      alert('Homepage settings will be added in a later version.');
-    });
+    (() => {
+      const form = document.querySelector('#search-form');
+      const input = document.querySelector('#query');
+      const toast = document.querySelector('#toast');
+      const weatherForm = document.querySelector('#weather-form');
+      const cityInput = document.querySelector('#city');
+      const weatherResult = document.querySelector('#weather-result');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let toastTimer;
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+      }
+
+      function updateClock() {
+        const now = new Date();
+        document.querySelector('#clock').textContent = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+        document.querySelector('#clock').setAttribute('aria-label', 'Local time ' + now.toLocaleTimeString());
+      }
+      updateClock();
+      setInterval(updateClock, 30000);
+
+      document.querySelector('#focus-search').addEventListener('click', () => input.focus());
+
+      function navigateTo(value) {
+        const text = value.trim();
+        if (!text) { input.focus(); return; }
+        const normalized = text.toLowerCase().replace(/^\/+|\/+$/g, '');
+        const commands = {
+          youtube: 'https://www.youtube.com/',
+          yt: 'https://www.youtube.com/',
+          github: 'https://github.com/',
+          chatgpt: 'https://chatgpt.com/',
+          google: 'https://www.google.com/',
+          weather: null,
+          time: null,
+          clear: null
+        };
+        if (normalized in commands) {
+          if (normalized === 'weather') { cityInput.focus(); weatherForm.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'center'}); showToast('Enter a city to check its weather.'); return; }
+          if (normalized === 'time') { showToast('Your local time is ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})); return; }
+          if (normalized === 'clear') { input.value = ''; input.focus(); return; }
+          window.location.href = commands[normalized];
+          return;
+        }
+        const isUrl = /^https?:\/\//i.test(text) || (/^[^\s.]+\.[^\s]+$/.test(text) && !text.includes(' '));
+        const destination = isUrl
+          ? (/^https?:\/\//i.test(text) ? text : 'https://' + text)
+          : 'https://www.google.com/search?q=' + encodeURIComponent(text);
+        window.location.href = destination;
+      }
+
+      form.addEventListener('submit', event => { event.preventDefault(); navigateTo(input.value); });
+      document.querySelectorAll('[data-command]').forEach(button => {
+        button.addEventListener('click', () => {
+          const command = button.dataset.command;
+          if (command === 'clear') { input.value = ''; input.focus(); return; }
+          if (command === 'weather') { cityInput.focus(); weatherForm.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'center'}); return; }
+          if (command === 'time') { showToast('Your local time is ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})); return; }
+          navigateTo(command);
+        });
+      });
+
+      const weatherCodes = {
+        0:['Clear sky','☀'],1:['Mainly clear','🌤'],2:['Partly cloudy','⛅'],3:['Overcast','☁'],
+        45:['Fog','🌫'],48:['Depositing rime fog','🌫'],51:['Light drizzle','🌦'],53:['Drizzle','🌦'],55:['Dense drizzle','🌧'],
+        56:['Freezing drizzle','🌧'],57:['Heavy freezing drizzle','🌧'],61:['Slight rain','🌦'],63:['Rain','🌧'],65:['Heavy rain','🌧'],
+        66:['Freezing rain','🌧'],67:['Heavy freezing rain','🌧'],71:['Slight snow','🌨'],73:['Snow','❄'],75:['Heavy snow','❄'],
+        77:['Snow grains','❄'],80:['Rain showers','🌦'],81:['Rain showers','🌧'],82:['Heavy showers','⛈'],
+        85:['Snow showers','🌨'],86:['Heavy snow showers','❄'],95:['Thunderstorm','⛈'],96:['Thunderstorm with hail','⛈'],99:['Thunderstorm with hail','⛈']
+      };
+      function renderWeather(icon, title, detail, isError) {
+        weatherResult.replaceChildren();
+        const symbol = document.createElement('span');
+        symbol.className = 'weather-symbol'; symbol.setAttribute('aria-hidden','true'); symbol.textContent = icon;
+        const text = document.createElement('div');
+        const heading = document.createElement('div'); heading.className = isError ? 'status error' : 'weather-temp'; heading.textContent = title;
+        const sub = document.createElement('div'); sub.className = 'weather-detail'; sub.textContent = detail;
+        text.append(heading, sub); weatherResult.append(symbol, text);
+      }
+      weatherForm.addEventListener('submit', async event => {
+        event.preventDefault();
+        const city = cityInput.value.trim();
+        if (!city) { cityInput.focus(); renderWeather('⌖','Enter a city first','For example, Rajkot or Mumbai.',true); return; }
+        const button = weatherForm.querySelector('button');
+        button.disabled = true; button.textContent = 'Loading…';
+        renderWeather('◌','Finding your forecast…','Connecting to the weather service.',false);
+        try {
+          const geoUrl = 'https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(city) + '&count=1&language=en&format=json';
+          const geoResponse = await fetch(geoUrl);
+          if (!geoResponse.ok) throw new Error('Could not reach the location service.');
+          const geo = await geoResponse.json();
+          if (!geo.results || !geo.results.length) throw new Error('City not found. Check the spelling and try again.');
+          const place = geo.results[0];
+          const forecastUrl = 'https://api.open-meteo.com/v1/forecast?latitude=' + place.latitude + '&longitude=' + place.longitude + '&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto';
+          const forecastResponse = await fetch(forecastUrl);
+          if (!forecastResponse.ok) throw new Error('Could not load the forecast right now.');
+          const forecast = await forecastResponse.json();
+          const current = forecast.current;
+          const info = weatherCodes[current.weather_code] || ['Current conditions','🌡'];
+          const location = [place.name, place.admin1, place.country].filter(Boolean).filter((part,index,array) => array.indexOf(part) === index).join(', ');
+          renderWeather(info[1], Math.round(current.temperature_2m) + '°C · ' + info[0], location + ' · Feels like ' + Math.round(current.apparent_temperature) + '°C · Wind ' + Math.round(current.wind_speed_10m) + ' km/h', false);
+        } catch (error) {
+          renderWeather('☁','Weather unavailable', error && error.message ? error.message : 'Check your connection and try again.', true);
+        } finally {
+          button.disabled = false; button.textContent = 'Check';
+        }
+      });
+
+      // Decorative canvas particles only; interaction and content never depend on animation.
+      if (!reduceMotion) {
+        const canvas = document.querySelector('#aurora');
+        const ctx = canvas.getContext('2d');
+        let width = 0, height = 0, particles = [], frame = 0;
+        function resizeCanvas() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+          width = window.innerWidth; height = window.innerHeight;
+          canvas.width = Math.floor(width * dpr); canvas.height = Math.floor(height * dpr);
+          ctx.setTransform(dpr,0,0,dpr,0,0);
+          const count = Math.min(34, Math.max(12, Math.floor(width / 22)));
+          particles = Array.from({length:count}, () => ({
+            x:Math.random()*width, y:Math.random()*height, r:Math.random()*1.7+.35,
+            dx:(Math.random()-.5)*.18, dy:(Math.random()-.5)*.16, phase:Math.random()*Math.PI*2
+          }));
+        }
+        function drawParticles() {
+          ctx.clearRect(0,0,width,height);
+          for (const p of particles) {
+            p.x += p.dx; p.y += p.dy; p.phase += .012;
+            if (p.x < -5) p.x = width+5; if (p.x > width+5) p.x = -5;
+            if (p.y < -5) p.y = height+5; if (p.y > height+5) p.y = -5;
+            const alpha = .12 + (Math.sin(p.phase)+1)*.12;
+            ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle = 'rgba(120,130,190,'+alpha.toFixed(3)+')'; ctx.fill();
+          }
+          frame = requestAnimationFrame(drawParticles);
+        }
+        resizeCanvas();
+        drawParticles();
+        window.addEventListener('resize', resizeCanvas, {passive:true});
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) cancelAnimationFrame(frame);
+          else drawParticles();
+        });
+      }
+    })();
   </script>
 </body>
 </html>
